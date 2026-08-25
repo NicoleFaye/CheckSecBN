@@ -16,6 +16,6 @@
         "Windows": "Copy this folder into %APPDATA%\\Binary Ninja\\plugins\\"
     },
     "version": "1.0.0",
-    "author": "CheckSecBN",
-    "minimumbinaryninjaversion": 3000
+    "author": "NicoleFaye",
+    "minimumbinaryninjaversion": 9757
 }
