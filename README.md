@@ -36,10 +36,10 @@ Restart Binary Ninja (or use the Plugin Manager's reload).
 With a PE binary loaded, run:
 
 ```
-Tools > CheckSecBN > Show Mitigation Report
+Tools > Generate CheckSec Report
 ```
 
-(or right-click in the disassembly/decompiler view and find it under the same submenu).
+(or right-click in the disassembly/decompiler view and find it there too).
 
 This opens a Markdown report tab with a mitigation table, and also logs a plain-text copy to the
 Binary Ninja log. It works the same way when run headlessly via the Binary Ninja API:

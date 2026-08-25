@@ -11,7 +11,7 @@ straight from the PE headers Binary Ninja has already parsed. No debugger
 session required.
 
 Adds a right-click / Tools menu command:
-    Checksec > Show Mitigation Report
+    Generate CheckSec Report
 
 Reports:
     - ASLR (Dynamic Base) / High Entropy VA
@@ -269,8 +269,12 @@ def _tri(val):
     return "Present" if val else "MISSING"
 
 
+def _filename(bv: "BinaryView") -> str:
+    return bv.file.filename if bv.file else "(unknown)"
+
+
 def build_report(bv: "BinaryView", mit: PEMitigations) -> str:
-    filename = bv.file.filename if bv.file else "(unknown)"
+    filename = _filename(bv)
     rows = [
         ("ASLR (Dynamic Base)", _tri(mit.aslr)),
         ("High Entropy VA", _tri(mit.high_entropy_va)),
@@ -326,8 +330,7 @@ def show_checksec_report(bv: "BinaryView"):
     # Always log a plain-text copy too, so this also works headlessly / in the console.
     bn.log_info(report)
 
-    filename = bv.file.filename if bv.file else "(unknown)"
-    project_name = os.path.basename(filename)
+    project_name = os.path.basename(_filename(bv))
     tab_title = f"{project_name} CheckSec Report"
 
     try:
