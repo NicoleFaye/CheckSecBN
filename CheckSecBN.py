@@ -7,7 +7,7 @@ A static, Narly/checksec-style exploit-mitigation reporter for Binary Ninja.
 The classic WinDbg extension "narly" (https://code.google.com/archive/p/narly/)
 inspected a *live* process's loaded modules and reported SafeSEH / GS / DEP /
 ASLR status. This plugin reports the same class of information, but statically,
-straight from the PE headers Binary Ninja has already parsed -- no debugger
+straight from the PE headers Binary Ninja has already parsed. No debugger
 session required.
 
 Adds a right-click / Tools menu command:
@@ -24,6 +24,7 @@ Reports:
     - Authenticode signature presence (blob presence only, not validated)
 """
 
+import os
 import struct
 
 import binaryninja as bn
@@ -325,14 +326,18 @@ def show_checksec_report(bv: "BinaryView"):
     # Always log a plain-text copy too, so this also works headlessly / in the console.
     bn.log_info(report)
 
+    filename = bv.file.filename if bv.file else "(unknown)"
+    project_name = os.path.basename(filename)
+    tab_title = f"{project_name} CheckSec Report"
+
     try:
-        bn.show_markdown_report("CheckSecBN Mitigation Report", report, report)
+        bn.show_markdown_report(tab_title, report, report)
     except Exception:
         pass  # not running in a UI context; the log above already has the report
 
 
 PluginCommand.register(
-    "CheckSecBN\\Show Mitigation Report",
+    "Generate CheckSec Report",
     "Report PE exploit mitigations (ASLR, DEP, SafeSEH, GS, CFG, signing). A static, "
     "Narly/checksec-style report for the loaded binary.",
     show_checksec_report,
